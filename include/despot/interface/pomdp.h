@@ -182,6 +182,16 @@ public:
 	virtual State* CreateStartState(std::string type = "DEFAULT") const;
 
 	/**
+	 * [Optional]
+	 * Returns feasible action set a.c. obs & particles
+	 * Used to limit the search range
+	 */
+	virtual std::vector<ACT_TYPE> GetFeasibleActions(OBS_TYPE obs, std::vector<State*> particles) const {
+		std::vector<ACT_TYPE> action_set;
+		return action_set;
+	};
+
+	/**
 	 * [Essential]
 	 * Returns the initial belief.
 	 * @param start The start state of the world
