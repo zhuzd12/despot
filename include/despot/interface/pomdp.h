@@ -186,7 +186,7 @@ public:
 	 * Returns feasible action set a.c. obs & particles
 	 * Used to limit the search range
 	 */
-	virtual std::vector<ACT_TYPE> GetFeasibleActions(OBS_TYPE obs, const std::vector<State*>& particles) const;
+	virtual std::vector<ACT_TYPE> GetFeasibleActions(OBS_TYPE obs, const std::vector<State*>& particles, History& history) const;
 
 	/**
 	 * [Optional]

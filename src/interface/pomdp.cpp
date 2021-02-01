@@ -92,7 +92,7 @@ State* DSPOMDP::CreateStartState(std::string type) const{
 	exit(1);
 }
 
-std::vector<ACT_TYPE> DSPOMDP::GetFeasibleActions(OBS_TYPE obs, const std::vector<State*>& particles) const {
+std::vector<ACT_TYPE> DSPOMDP::GetFeasibleActions(OBS_TYPE obs, const std::vector<State*>& particles, History& history) const {
 	std::vector<ACT_TYPE> action_set;
 	for (ACT_TYPE action = 0; action < NumActions(); action++) {
 		action_set.push_back(action);

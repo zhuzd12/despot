@@ -635,7 +635,7 @@ void DESPOT::Expand(VNode* vnode,
 	logd << "- Expanding vnode " << vnode << endl;
 	if (model->HasGuidedSearchPolicy()) {
         // auto action_set = guided_search_policy_(model, vnode->edge(), vnode->particles());
-        std::vector<ACT_TYPE> action_set = model->GetFeasibleActions(vnode->edge(), vnode->particles());
+        std::vector<ACT_TYPE> action_set = model->GetFeasibleActions(vnode->edge(), vnode->particles(), history);
 		// std::cout << "model has action " << action_set.size() << std::endl;
 		// if (vnode->depth() == 0) {
 		// 	std::cout << "init state obs " << vnode->edge() << std::endl;
