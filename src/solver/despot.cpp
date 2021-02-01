@@ -462,8 +462,10 @@ QNode* DESPOT::Prune(QNode* qnode, double& pruned_value) {
 
 ValuedAction DESPOT::OptimalAction(VNode* vnode) {
 	ValuedAction astar(-1, Globals::NEG_INFTY);
-	for (ACT_TYPE action = 0; action < vnode->children().size(); action++) {
-		QNode* qnode = vnode->Child(action);
+	// for (ACT_TYPE action = 0; action < vnode->children().size(); action++) {
+	for (int i = 0; i < vnode->children().size(); i++) {
+		ACT_TYPE action = vnode->children()[i]->edge();
+		QNode* qnode = vnode->Child(i);
 		if (qnode->lower_bound() > astar.value) {
 			astar = ValuedAction(action, qnode->lower_bound());
 		}
@@ -512,17 +514,20 @@ VNode* DESPOT::SelectBestWEUNode(QNode* qnode) {
 
 QNode* DESPOT::SelectBestUpperBoundNode(VNode* vnode) {
 	int astar = -1;
+	int astar_index = -1;
 	double upperstar = Globals::NEG_INFTY;
-	for (ACT_TYPE action = 0; action < vnode->children().size(); action++) {
-		QNode* qnode = vnode->Child(action);
+	for (int i = 0; i < vnode->children().size(); i++) {
+		ACT_TYPE action =  vnode->children()[i]->edge();
+		QNode* qnode = vnode->Child(i);
 
 		if (qnode->upper_bound() > upperstar) {
 			upperstar = qnode->upper_bound();
 			astar = action;
+			astar_index = i;
 		}
 	}
 	assert(astar >= 0);
-	return vnode->Child(astar);
+	return vnode->Child(astar_index);
 }
 
 void DESPOT::Update(VNode* vnode) {
@@ -534,8 +539,9 @@ void DESPOT::Update(VNode* vnode) {
 	double upper = vnode->default_move().value;
 	double utility_upper = Globals::NEG_INFTY;
 
-	for (ACT_TYPE action = 0; action < vnode->children().size(); action++) {
-		QNode* qnode = vnode->Child(action);
+	for (int i = 0; i < vnode->children().size(); i++) {
+		ACT_TYPE action =  vnode->children()[i]->edge();
+		QNode* qnode = vnode->Child(i);
 
 		lower = max(lower, qnode->lower_bound());
 		upper = max(upper, qnode->upper_bound());
@@ -627,13 +633,36 @@ void DESPOT::Expand(VNode* vnode,
 	History& history) {
 	vector<QNode*>& children = vnode->children();
 	logd << "- Expanding vnode " << vnode << endl;
-	for (ACT_TYPE action = 0; action < model->NumActions(); action++) {
-		logd << " Action " << action << endl;
-		QNode* qnode = new QNode(vnode, action);
-		children.push_back(qnode);
+	if (model->HasGuidedSearchPolicy()) {
+        // auto action_set = guided_search_policy_(model, vnode->edge(), vnode->particles());
+        std::vector<ACT_TYPE> action_set = model->GetFeasibleActions(vnode->edge(), vnode->particles());
+		// std::cout << "model has action " << action_set.size() << std::endl;
+		// if (vnode->depth() == 0) {
+		// 	std::cout << "init state obs " << vnode->edge() << std::endl;
+		// }
+		// if (action_set.empty()) {
+		// 	std::cout << "zzzzzzz" << std::endl;
+		// }
+        for (int action_index = 0; action_index < action_set.size(); action_index++) {
+			ACT_TYPE action = action_set[action_index];
+            logd << " Action " << action << endl;
+			// if (vnode->depth() == 0) {
+			// 	std::cout << "expand action " << action << std::endl;
+			// }
+            QNode* qnode = new QNode(vnode, action);
+            children.push_back(qnode);
 
-		Expand(qnode, lower_bound, upper_bound, model, streams, history);
-	}
+            Expand(qnode, lower_bound, upper_bound, model, streams, history);
+        }
+    } else {
+        for (ACT_TYPE action = 0; action < model->NumActions(); action++) {
+            logd << " Action " << action << endl;
+            QNode* qnode = new QNode(vnode, action);
+            children.push_back(qnode);
+
+            Expand(qnode, lower_bound, upper_bound, model, streams, history);
+        }
+    }
 	logd << "* Expansion complete!" << endl;
 }
 

@@ -35,7 +35,7 @@ bool POMDPWorld::ExecuteAction(ACT_TYPE action, OBS_TYPE& obs) {
 	model_->PrintAction(action);
 	bool terminal = model_->Step(*state_, random_.NextDouble(), action,
 			step_reward_, obs);
-	std::cout << "zzd2 state " << state_->text() << " terminal " << terminal << " reward " << step_reward_ << std::endl;
+	std::cout << "zzd2 state " << state_->text() << " obs " << obs << " terminal " << terminal << " reward " << step_reward_ << std::endl;
 	return terminal;
 }
 

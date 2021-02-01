@@ -92,6 +92,19 @@ State* DSPOMDP::CreateStartState(std::string type) const{
 	exit(1);
 }
 
+std::vector<ACT_TYPE> DSPOMDP::GetFeasibleActions(OBS_TYPE obs, const std::vector<State*>& particles) const {
+	std::vector<ACT_TYPE> action_set;
+	for (ACT_TYPE action = 0; action < NumActions(); action++) {
+		action_set.push_back(action);
+	}
+	return action_set;
+};
+
+bool DSPOMDP::HasGuidedSearchPolicy() const {
+	return false;
+};
+
+
 ParticleUpperBound* DSPOMDP::CreateParticleUpperBound(string name) const {
 	if (name == "TRIVIAL" || name == "DEFAULT") {
 		return new TrivialParticleUpperBound(this);
