@@ -75,6 +75,7 @@ protected:
 	static VNode* SelectBestWEUNode(QNode* qnode);
 	static QNode* SelectBestUpperBoundNode(VNode* vnode);
 	static ValuedAction OptimalAction(VNode* vnode);
+	void ConstructFutureTraj(VNode* vnode);
 
 	static ValuedAction Evaluate(VNode* root, std::vector<State*>& particles,
 		RandomStreams& streams, POMCPPrior* prior, const DSPOMDP* model);

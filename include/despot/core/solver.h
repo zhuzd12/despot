@@ -43,6 +43,7 @@ protected:
 	const DSPOMDP* model_;
 	Belief* belief_;
 	History history_;
+	History future_;
 
 public:
 	Solver(const DSPOMDP* model, Belief* belief);
@@ -68,6 +69,7 @@ public:
 	 */
 	virtual void belief(Belief* b);
 	Belief* belief();
+	History future();
 };
 
 } // namespace despot

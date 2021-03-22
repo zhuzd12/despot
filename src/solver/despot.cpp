@@ -261,6 +261,7 @@ ValuedAction DESPOT::Search() {
 		<< (get_time_second() - start) << "s" << endl;
 
 	start = get_time_second();
+	ConstructFutureTraj(root_);
 	root_->Free(*model_);
 	logi << "[DESPOT::Search] Time for freeing particles in search tree: "
 		<< (get_time_second() - start) << "s" << endl;
@@ -476,6 +477,49 @@ ValuedAction DESPOT::OptimalAction(VNode* vnode) {
 	}
 
 	return astar;
+}
+
+void DESPOT::ConstructFutureTraj(VNode* vnode) {
+	future_.Truncate(0);
+	VNode* cur_vnode = vnode;
+	while(true) {
+		if (cur_vnode->children().empty()) {
+			break;
+		}
+		ValuedAction astar(-1, Globals::NEG_INFTY);
+		QNode* qnodestar;
+		for (int i = 0; i < cur_vnode->children().size(); i++) {
+			ACT_TYPE action = cur_vnode->children()[i]->edge();
+			QNode* qnode = cur_vnode->Child(i);
+			if (qnode->lower_bound() > astar.value) {
+				astar = ValuedAction(action, qnode->lower_bound());
+				qnodestar = qnode;
+			}
+		}
+		if (cur_vnode->default_move().value > astar.value) {
+			astar = cur_vnode->default_move();
+			qnodestar = NULL;
+		}
+		if (qnodestar == NULL || qnodestar->children().empty()) {
+			break;
+		}
+		// cur_vnode = qnodestar->children()[0];
+		double obs_prob = 0.0;
+		for (map<OBS_TYPE, VNode*>::iterator it = qnodestar->children().begin();
+				it != qnodestar->children().end(); it++) {
+			if (it->second->Weight() > obs_prob) {
+				obs_prob = it->second->Weight();
+				cur_vnode = it->second;
+				if (it->second->Weight() > 0.5) {
+					break;
+				}
+			}
+		}
+		if (cur_vnode == NULL) {
+			break;
+		}
+		future_.Add(astar.action, cur_vnode->edge());
+	}
 }
 
 double DESPOT::Gap(VNode* vnode) {

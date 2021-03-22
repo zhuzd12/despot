@@ -84,4 +84,8 @@ Belief* Solver::belief() {
 	return belief_;
 }
 
+History Solver::future() {
+	return future_;
+}
+
 } // namespace despot
