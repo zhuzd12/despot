@@ -39,7 +39,7 @@ private:
 	static const std::string markers_[];
 
 public:
-	static const int NONE, ERROR, WARN, INFO, DEBUG, VERBOSE;
+	static const int NONE, ERROR, WARN, INFO, DEBUG, VERB;
 
 public:
 	static void level(int verbosity);
@@ -58,7 +58,7 @@ else despot::logging::stream(lv)
 #define logw LOG(despot::logging::WARN)
 #define logi LOG(despot::logging::INFO)
 #define logd LOG(despot::logging::DEBUG)
-#define logv LOG(despot::logging::VERBOSE)
+#define logv LOG(despot::logging::VERB)
 
 #define default_out \
 if (Globals::config.silence) ; \

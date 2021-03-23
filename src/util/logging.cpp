@@ -6,13 +6,13 @@ using namespace std;
 namespace despot {
 
 const string logging::markers_[] = { "NONE", "ERROR", "WARN", "INFO", "DEBUG",
-	"VERBOSE" };
+	"VERB" };
 const int logging::NONE = 0;
 const int logging::ERROR = 1;
 const int logging::WARN = 2;
 const int logging::INFO = 3;
 const int logging::DEBUG = 4;
-const int logging::VERBOSE = 5;
+const int logging::VERB = 5;
 
 log_ostream::log_ostream(ostream& out, string marker) :
 	ostream(&buffer_),
@@ -55,7 +55,7 @@ log_ostream& logging::stream(int level) {
 }
 
 void logging::stream(int level, ostream& out) {
-	if (level >= ERROR && level <= VERBOSE) {
+	if (level >= ERROR && level <= VERB) {
 		streams_[level] = new log_ostream(out, markers_[level]);
 	}
 }
@@ -68,7 +68,7 @@ vector<log_ostream*> logging::InitializeLogStreams() {
 	streams[WARN] = new log_ostream(cerr, markers_[WARN]);
 	streams[INFO] = new log_ostream(cerr, markers_[INFO]);
 	streams[DEBUG] = new log_ostream(cerr, markers_[DEBUG]);
-	streams[VERBOSE] = new log_ostream(cerr, markers_[VERBOSE]);
+	streams[VERB] = new log_ostream(cerr, markers_[VERB]);
 
 	return streams;
 }
