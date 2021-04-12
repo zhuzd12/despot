@@ -70,6 +70,9 @@ public:
 	virtual void belief(Belief* b);
 	Belief* belief();
 	History future();
+	const DSPOMDP* Model() {
+		return model_;
+	}
 };
 
 } // namespace despot

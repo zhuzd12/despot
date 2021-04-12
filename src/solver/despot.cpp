@@ -496,10 +496,10 @@ void DESPOT::ConstructFutureTraj(VNode* vnode) {
 				qnodestar = qnode;
 			}
 		}
-		if (cur_vnode->default_move().value > astar.value) {
-			astar = cur_vnode->default_move();
-			qnodestar = NULL;
-		}
+		// if (cur_vnode->default_move().value > astar.value) {
+		// 	astar = cur_vnode->default_move();
+		// 	qnodestar = NULL;
+		// }
 		if (qnodestar == NULL || qnodestar->children().empty()) {
 			break;
 		}

@@ -191,6 +191,7 @@ Solver *PlannerBase::InitializeSolver(DSPOMDP *model, Belief* belief,
 
 			logi << "Created upper bound " << typeid(*upper_bound).name()
 					<< endl;
+			std::cout << "DESPOT lower_bound " << lbtype << " " << blbtype << " " << bubtype << " " << bubtype << std::endl;
 
 			solver = new DESPOT(model, lower_bound, upper_bound);
 		} else

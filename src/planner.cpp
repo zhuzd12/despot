@@ -32,6 +32,12 @@ bool Planner::RunStep(Solver* solver, World* world, Logger* logger) {
 
 	double start_t = get_time_second();
 	ACT_TYPE action = solver->Search().action;
+	History future_traj = solver->future();
+	std::cout << "future action seq: " << std::endl;
+	for (int i = 0; i < future_traj.Size(); i++) {
+    ACT_TYPE cur_action = future_traj.Action(i);
+	solver->Model()->PrintAction(cur_action);
+	}
 	double end_t = get_time_second();
 	double search_time = (end_t - start_t);
 	logi << "[RunStep] Time spent in " << typeid(*solver).name()

@@ -31,11 +31,11 @@ despot::State* POMDPWorld::GetCurrentState() const {
 }
 
 bool POMDPWorld::ExecuteAction(ACT_TYPE action, OBS_TYPE& obs) {
-	std::cout << "zzd1 state " << state_->text() << std::endl;
+	std::cout << "POMDPWorld before state " << state_->text() << std::endl;
 	model_->PrintAction(action);
 	bool terminal = model_->Step(*state_, random_.NextDouble(), action,
 			step_reward_, obs);
-	std::cout << "zzd2 state " << state_->text() << " obs " << obs << " terminal " << terminal << " reward " << step_reward_ << std::endl;
+	std::cout << "POMDPWorld after state " << state_->text() << " obs " << obs << " terminal " << terminal << " reward " << step_reward_ << std::endl;
 	return terminal;
 }
 
